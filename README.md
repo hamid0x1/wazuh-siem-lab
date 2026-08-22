@@ -669,34 +669,3 @@ All three custom rules confirmed firing against real [`attack-detect-lab`](https
 ### Comparison with `detect.py`
 
 The most interesting finding isn't that the rules worked — it's that Wazuh hit the **exact same documented blind spot** `detect.py` already found: stored/POST-body XSS payloads never appear in a standard Apache `access.log`, since access logs only capture the request line (method, URL, query string), not the POST body. Both a from-scratch Python detector and a mature, production SIEM ruleset share this limitation because it's a property of the log source itself, not a weakness in either tool's logic. That consistency across two independently-built detectors is stronger evidence for the finding than either tool alone.
-
----
-
-## Next steps
-
-- ~~Enroll an endpoint as a monitored agent~~ — done: WSL2 Ubuntu agent on the laptop, enrolled and confirmed sending DVWA `access.log` events (496 events seen in the dashboard)
-- ~~Write custom Wazuh detection rules and compare against `detect.py`~~ — done: SQLi, XSS, and brute-force rules all confirmed firing on real traffic; shared XSS blind spot (POST body not visible in access logs) confirmed matching `detect.py`'s earlier finding
-- ~~Take screenshots for the writeup~~ — done: all referenced above, saved under `screenshots/` at repo root
-- Push the finished repo (README + `local_rules.xml` + `scripts/wazuh-4.14.7-offline-downloader.sh` + `screenshots/`) to GitHub as repo #2, pinned alongside [`attack-detect-lab`](https://github.com/hamid0x1/attack-detect-lab/)
-- Consider using the one remaining CV revision to move Wazuh SIEM Lab from "In Progress" to complete
-
----
-
-## Screenshots reference
-
-All files below live in `screenshots/` at the repo root; filenames match exactly what's linked inline throughout this document.
-
-| Filename | Shows |
-|---|---|
-| `vbox-bridged-adapter-settings.png` | VirtualBox Adapter 1 settings — Bridged Adapter attached to the physical USB-C tether interface |
-| `status-wazuh-indexer.webp` | `systemctl status wazuh-indexer` — active and running |
-| `status-wazuh-manager.webp` | `systemctl status wazuh-manager` — active, all child daemons listed |
-| `status-wazuh-filebeat.webp` | `systemctl status filebeat` — active and running |
-| `status-wazuh-dashboard.webp` | `systemctl status wazuh-dashboard` — active and running |
-| `wazuh-login-screen.png` | Dashboard login screen at `https://192.168.8.21` |
-| `dashboard-overview-no-agents.png` | Overview page right after install, before any agent was enrolled |
-| `wsl2-hydra-sync-live.png` | WSL2 terminal: Hydra brute-forcing DVWA live, alongside `sync-logs.sh` running in a watch loop |
-| `events-default-web-attack-rule-31106.png` | Built-in rule 31106 firing on raw DVWA traffic, before custom rules existed |
-| `dashboard-stats-agent-ol1-pre-rules.png` | Dashboard summary stats for the same pre-custom-rules traffic |
-| `events-sqli-only-100001-15hits.png` | Mid-debugging: only SQLi (100001) firing, XSS/brute-force rules not yet working |
-| `events-bruteforce-confirmed-100003-244hits.png` | Final result: brute-force rule 100003 confirmed firing after the `if_group` fix |
