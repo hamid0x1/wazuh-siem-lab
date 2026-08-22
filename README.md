@@ -13,13 +13,11 @@ All screenshots referenced below are in [`/screenshots`](./screenshots) at the r
 | Host | Windows, VirtualBox |
 | Guest OS | Ubuntu Server 22.04.5 LTS (Jammy) |
 | VM name | `wazuh-ubu-22.04.5` |
-| VM specs | 8192 MB RAM, 2 vCPU, 50 GB disk (dynamically allocated) |
+| VM specs | 4096 MB RAM (Later we have to bump it up to 8192 MB), 2 vCPU, 50 GB disk (dynamically allocated) |
 | Network mode | Bridged Adapter (tethered via Olax M100 pocket router) |
 | VM static IP | `192.168.8.21` |
 | Wazuh version | 4.14.7 (all-in-one deployment: indexer, manager, dashboard on one host) |
 | Install method | Fully offline — packages pre-downloaded on a separate internet-connected machine, transferred via SCP |
-
-> **Note — VM name vs. hostname are intentionally different, not a typo:** the VirtualBox VM name (`wazuh-ubu-22.04.5`) and the actual Linux hostname (`wazuh-ubu-22045`) are two separate values by design. VirtualBox's VM name is just a label in the Manager UI; the real OS hostname is set during install and is what Wazuh actually reports (e.g. in the dashboard's `manager.name` field). Hostnames can't contain dots the way a display name can — dots are reserved as domain separators in a proper FQDN — so the dots were dropped when the hostname was typed in Subiquity. Nothing was misconfigured; expect `manager.name` in the dashboard to show the no-dots version.
 
 ---
 
@@ -27,7 +25,7 @@ All screenshots referenced below are in [`/screenshots`](./screenshots) at the r
 
 **VirtualBox → Machine → New**
 - Name: `wazuh-ubu-22.04.5`, Type: Linux, Version: Ubuntu (64-bit)
-- Memory: 8192 MB
+- Memory: 4096 MB (Later we have to bump it up to 8192 MB)
 - CPU: 2 vCPUs
 - Hard disk: new VDI, dynamically allocated, 50 GB
 
@@ -54,6 +52,7 @@ Fully keyboard-driven installer, no mouse needed:
 7. Mirror → leave default
 8. Storage → **Use an entire disk** (LVM checked) → confirm destructive action → Continue
 9. Profile setup → hostname `wazuh-ubu-22045`, username `waz-mngr`, set a password
+> **Note — VM name vs. hostname are intentionally different, not a typo:** the VirtualBox VM name (`wazuh-ubu-22.04.5`) and the actual Linux hostname (`wazuh-ubu-22045`) are two separate values by design. VirtualBox's VM name is just a label in the Manager UI; the real OS hostname is set during install and is what Wazuh actually reports (e.g. in the dashboard's `manager.name` field). Hostnames can't contain dots the way a display name can — dots are reserved as domain separators in a proper FQDN — so the dots were dropped when the hostname was typed in Subiquity. Nothing was misconfigured; expect `manager.name` in the dashboard to show the no-dots version.
 10. Ubuntu Pro → skip
 11. SSH Setup → **check "Install OpenSSH server"** — this is what lets you work from a real terminal instead of the tiny VirtualBox console window
 12. Featured Server Snaps → skip all
